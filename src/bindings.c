@@ -19,7 +19,7 @@ static char copheneticd_module_docs[] = "Calculate pairwise distances from a phy
 // Module definition
 static struct PyModuleDef copheneticd_module = {
     PyModuleDef_HEAD_INIT,
-    "copheneticd",
+    "_copheneticd",
     copheneticd_module_docs,
     -1,
     CopheneticdMethods
@@ -27,6 +27,6 @@ static struct PyModuleDef copheneticd_module = {
 
 
 // Module init
-PyMODINIT_FUNC PyInit_copheneticd(void) {
+PyMODINIT_FUNC PyInit__copheneticd(void) {
 	return PyModule_Create(&copheneticd_module);
 }

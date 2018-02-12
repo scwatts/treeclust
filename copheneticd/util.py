@@ -1,11 +1,11 @@
-#!/usr/bin/env python3
+import collections
 import sys
 
 
 import Bio.Phylo
 
 
-import copheneticd
+import _copheneticd
 
 
 class Node():
@@ -18,7 +18,7 @@ class Node():
 
 def distance(tree):
     # Check that input tree is an instance of BioPython's BaseTree
-    if not isinstance(tree, Bio.Phylo.BaseTree):
+    if not isinstance(tree, Bio.Phylo.BaseTree.Tree):
         print('error: recived non-tree object', file=sys.stderr)
         return
 
@@ -31,7 +31,7 @@ def distance(tree):
 
     # TODO: must apply cladewise ordering prior to cophenetic distance calc
     edges_source, edges_target = zip(*edges)
-    flat_distances = copheneticd.run(tips, nodes, edges_source, edges_target, distances, len(edges))
+    flat_distances = _copheneticd.run(tips, nodes, edges_source, edges_target, distances, len(edges))
 
     # TODO: see if ther is some alternative in native c; this is very expensive
     # Round to reasonable decimal places
