@@ -30,16 +30,9 @@ def distance(tree):
     distances, edges = edge_distances(tree, tips)
 
     # TODO: must apply cladewise ordering prior to cophenetic distance calc
+    # TODO: this may not be necessary for raw trees
     edges_source, edges_target = zip(*edges)
-    flat_distances = _copheneticd.run(tips, nodes, edges_source, edges_target, distances, len(edges))
-
-    # TODO: see if ther is some alternative in native c; this is very expensive
-    # Round to reasonable decimal places
-    flat_distances = [round(d, 6) for d in flat_distances]
-
-    # Create 2d list from distances
-    row_gen = (flat_distances[i:i+tips] for i in range(0, len(flat_distances), tips))
-    return [row for row in row_gen]
+    return _copheneticd.run(tips, nodes, edges_source, edges_target, distances, len(edges))
 
 
 def edge_distances(tree, tip_number):

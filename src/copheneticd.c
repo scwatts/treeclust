@@ -45,15 +45,25 @@ PyObject *run(PyObject *self, PyObject *args) {
 
 
 PyObject *cast_tip_distances(double *distances, int tip_num, int elements) {
-    PyObject *py_tip_distances = PyList_New(tip_num * tip_num);
+    PyObject *py_matrix = PyList_New(tip_num);
+    PyObject *py_row = PyList_New(tip_num);
 
     size_t i = 0, j = 0;
     for (size_t k = 0; k < (elements * elements); k++, i++) {
-      if (i == tip_num) { j++; i = 0; k += elements - tip_num; }
-      if (j >= tip_num) { break; }
-      size_t item_index = j * tip_num + i;
-      PyList_SetItem(py_tip_distances, item_index, PyFloat_FromDouble(distances[k]));
-    }
+        // Add completed row to matrix
+        if (i == tip_num) {
+            PyList_SetItem(py_matrix, j, py_row);
+            j++; i = 0; k += elements - tip_num;
+            py_row = PyList_New(tip_num);
+        }
 
-    return py_tip_distances;
+        // Break for loop once all tip data are consumed
+        if (j >= tip_num) { break; }
+
+        // Malloc does not clear memory, we must set diagonals to zero
+        double distance = distances[k];
+        if (i == j) { distance = 0.0; }
+        PyList_SetItem(py_row, i, PyFloat_FromDouble(distance));
+    }
+    return py_matrix;
 }
