@@ -1,5 +1,5 @@
-#ifndef __CORE_H__
-#define __CORE_H__
+#ifndef __COPHENETIC_H__
+#define __COPHENETIC_H__
 
 
 #include <Python.h>
