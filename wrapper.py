@@ -1,26 +1,11 @@
 #!/usr/bin/env python3
-import argparse
-import collections
-import pathlib
+import sys
 
 
-import Bio.Phylo.NewickIO
+import Bio.Phylo
 
 
 import copheneticd
-
-
-def get_arguments():
-    parser = argparse.ArgumentParser()
-    parser.add_argument('--input_fp', required=True, type=pathlib.Path,
-            help='Inptu file path pls')
-
-    # Ensure that input file exists
-    args = parser.parse_args()
-    if not args.input_fp.exists():
-        parser.error('Input file %s does not exist' % args.input_fp)
-
-    return args
 
 
 class Node():
@@ -31,13 +16,11 @@ class Node():
         self.branch_length = tree_node.branch_length
 
 
-def main():
-    # Get command line arguments
-    args = get_arguments()
-
-    # Read in tree, assuming only single tree in file
-    with args.input_fp.open('r') as fh:
-        tree = next(Bio.Phylo.NewickIO.parse(fh))
+def distance(tree):
+    # Check that input tree is an instance of BioPython's BaseTree
+    if not isinstance(tree, Bio.Phylo.BaseTree):
+        print('error: recived non-tree object', file=sys.stderr)
+        return
 
     # Get terminal and non-terminal nodes
     tips = tree.count_terminals()
@@ -50,14 +33,13 @@ def main():
     edges_source, edges_target = zip(*edges)
     flat_distances = copheneticd.run(tips, nodes, edges_source, edges_target, distances, len(edges))
 
+    # TODO: see if ther is some alternative in native c; this is very expensive
     # Round to reasonable decimal places
-    flat_distances = [round(d, 4) for d in flat_distances]
+    flat_distances = [round(d, 6) for d in flat_distances]
 
     # Create 2d list from distances
     row_gen = (flat_distances[i:i+tips] for i in range(0, len(flat_distances), tips))
-    distances = [row for row in row_gen]
-    for r in distances:
-        print(*r, sep='\t')
+    return [row for row in row_gen]
 
 
 def edge_distances(tree, tip_number):
@@ -98,7 +80,3 @@ def edge_distances(tree, tip_number):
         edges.append((node.parent_id, node_id))
 
     return distances, edges
-
-
-if __name__ == '__main__':
-    main()
