@@ -90,7 +90,7 @@ def edge_distances(tree, tip_number):
             node_queue.append(Node(child_node, node_id))
 
         # Skip node if it is root
-        if not node.branch_length:
+        if node.branch_length is None:
             continue
 
         # Record distances and edges
