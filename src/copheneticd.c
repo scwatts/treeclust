@@ -45,25 +45,20 @@ PyObject *copheneticd(PyObject *self, PyObject *args) {
 
 
 PyObject *cast_tip_distances(double *distances, int tip_num, int elements) {
-    PyObject *py_matrix = PyList_New(tip_num);
-    PyObject *py_row = PyList_New(tip_num);
+    PyObject *py_matrix = PyList_New(tip_num * (tip_num - 1) / 2);
 
-    size_t i = 0, j = 0;
+    size_t i = 0, j = 0, n = 0;
     for (size_t k = 0; k < (size_t)(elements * elements); k++, i++) {
-        // Add completed row to matrix
-        if (i == (size_t)tip_num) {
-            PyList_SetItem(py_matrix, j, py_row);
-            j++; i = 0; k += elements - tip_num;
-            py_row = PyList_New(tip_num);
-        }
-
-        // Break for loop once all tip data are consumed
+        // Stay within tip_num bounds
+        if (i == (size_t)tip_num) { j++; i = 0; k += elements - tip_num; }
         if (j >= (size_t)tip_num) { break; }
 
-        // Malloc does not clear memory, we must set diagonals to zero
-        double distance = distances[k];
-        if (i == j) { distance = 0.0; }
-        PyList_SetItem(py_row, i, PyFloat_FromDouble(distance));
+        // Only record elements below diagonal
+        if (i <= j) { continue; }
+
+        PyList_SetItem(py_matrix, n, PyFloat_FromDouble(distances[k]));
+        n++;
     }
+
     return py_matrix;
 }
