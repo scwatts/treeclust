@@ -3,10 +3,23 @@
 
 
 PyObject *hclust(PyObject *self, PyObject *args) {
-    // Input arguments
-    double distance[] = {1.920595, 2.320279, 3.088601, 3.019876, 1.208072, 3.227629, 3.158904, 3.627313, 3.558588, 1.617937};
-    int n = 5;
-    int iopt = 8;
+    // Top-level arguments
+    PyObject *py_distances;
+    int n = 0, iopt = 0;
+
+    // Collect top-level arguments
+    if(!PyArg_ParseTuple(args, "OII", &py_distances, &n, &iopt)) {
+      return NULL;
+    }
+
+    // Check that that python objects are iterables and of correct type
+    if (! is_pysimplenumeric_pysequence(py_distances)) {
+      PyErr_SetString(PyExc_TypeError, "py_distances was not a integer or float sequence (e.g. list or tuple)");
+      return NULL;
+    }
+
+    // Cast python types to c types
+    cast_pysequence_to_array(py_distances, distances, PySequence_Size(py_distances), PyFloat_AsDouble, double);
 
     // Set up variables
     int length = (n*(n-1)/2);
@@ -14,14 +27,45 @@ PyObject *hclust(PyObject *self, PyObject *args) {
     double crit[n], disnn[n], membr[n];
 
     // Initialise all memory
+    // TODO: better way to do this? memset?
     for (size_t i = 0; i < n; i++) {
         ia[i] = ib[i] = nn[i] = flag[i] = order[i] = iia[i] = iib[i] = crit[i] = disnn[i] = 0;
         membr[i] = 1;
     }
 
     // Run clustering and interpret results
-    hclust_(&n, &length, &iopt, ia, ib, crit, membr, nn, disnn, flag, distance);
+    hclust_(&n, &length, &iopt, ia, ib, crit, membr, nn, disnn, flag, distances);
     hcass2_(&n, ia, ib, order, iia, iib);
 
-    return PyUnicode_FromString("Returning");
+    return cast_result_to_pytype(iia, iib, crit, order, n);
+}
+
+
+PyObject *cast_result_to_pytype(int iia[], int iib[], double crit[], int order[], int n) {
+    PyObject *py_data = PyDict_New();
+    PyObject *py_crit = PyList_New(n-1);
+    PyObject *py_merge = PyList_New(n-1);
+    PyObject *py_order = PyList_New(n);
+
+    // Zip iia and iib together
+    // Cast crit to list
+    for (size_t i = 0; i < (n-1); i++) {
+        // Create merge list item and then record
+        PyObject *py_merge_item = PyList_New(2);
+        PyList_SetItem(py_merge_item, 0, PyLong_FromLong(iia[i]));
+        PyList_SetItem(py_merge_item, 1, PyLong_FromLong(iib[i]));
+        PyList_SetItem(py_merge, i, py_merge_item);
+
+        // Record crit item
+        PyList_SetItem(py_crit, i, PyFloat_FromDouble(crit[i]));
+    }
+    // Cast order to py list
+    for (size_t i = 0; i < n; i++) { PyList_SetItem(py_order, i, PyLong_FromLong(order[i])); }
+
+    // Set py dict items
+    PyDict_SetItemString(py_data, "merge", py_merge);
+    PyDict_SetItemString(py_data, "height", py_crit);
+    PyDict_SetItemString(py_data, "order", py_order);
+
+    return py_data;
 }
