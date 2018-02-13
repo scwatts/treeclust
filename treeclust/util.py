@@ -77,6 +77,7 @@ def edge_distances(tree, tip_number):
 
 def hclust(distances, elements, method):
     # TODO: add handler for options to take as string
+    # TODO: logic to determine or take number of elements
     # TODO: check arguments have a valid configuration
     return _treeclust.hclust(distances, elements, method)
 
