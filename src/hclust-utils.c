@@ -1,3 +1,6 @@
+#include "hclust-utils.h"
+
+
 /*
  *  R : A Computer Language for Statistical Data Analysis
 
