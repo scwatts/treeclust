@@ -73,3 +73,9 @@ def edge_distances(tree, tip_number):
         edges.append((node.parent_id, node_id))
 
     return distances, edges
+
+
+def hclust(distances, elements, method):
+    # TODO: add handler for options to take as string
+    # TODO: check arguments have a valid configuration
+    return _treeclust.hclust(distances, elements, method)

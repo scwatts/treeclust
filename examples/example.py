@@ -34,6 +34,9 @@ def main():
     # Run pair-wise-distance calculation
     distances = treeclust.copheneticd(tree)
 
+    # Get clusters
+    clustering = treeclust.hclust(distances, 5, 3)
+
 
 if __name__ == '__main__':
     main()

@@ -28,7 +28,7 @@ PyObject *hclust(PyObject *self, PyObject *args) {
 
     // Initialise all memory
     // TODO: better way to do this? memset?
-    for (size_t i = 0; i < n; i++) {
+    for (size_t i = 0; i < (size_t)n; i++) {
         ia[i] = ib[i] = nn[i] = flag[i] = order[i] = iia[i] = iib[i] = crit[i] = disnn[i] = 0;
         membr[i] = 1;
     }
@@ -49,7 +49,7 @@ PyObject *cast_result_to_pytype(int iia[], int iib[], double crit[], int order[]
 
     // Zip iia and iib together
     // Cast crit to list
-    for (size_t i = 0; i < (n-1); i++) {
+    for (size_t i = 0; i < (size_t)(n-1); i++) {
         // Create merge list item and then record
         PyObject *py_merge_item = PyList_New(2);
         PyList_SetItem(py_merge_item, 0, PyLong_FromLong(iia[i]));
@@ -60,7 +60,7 @@ PyObject *cast_result_to_pytype(int iia[], int iib[], double crit[], int order[]
         PyList_SetItem(py_crit, i, PyFloat_FromDouble(crit[i]));
     }
     // Cast order to py list
-    for (size_t i = 0; i < n; i++) { PyList_SetItem(py_order, i, PyLong_FromLong(order[i])); }
+    for (size_t i = 0; i < (size_t)n; i++) { PyList_SetItem(py_order, i, PyLong_FromLong(order[i])); }
 
     // Set py dict items
     PyDict_SetItemString(py_data, "merge", py_merge);
