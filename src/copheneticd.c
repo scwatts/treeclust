@@ -37,7 +37,7 @@ PyObject *run(PyObject *self, PyObject *args) {
     double *distances = (double *)malloc(sizeof(double) * elements * elements);
 
     // Get pairwise distance between all nodes
-    dist_nodes(&tip_num, &node_num, &edge_source, &edge_target, &edge_distances, &edge_num, distances);
+    dist_nodes(&tip_num, &node_num, &edge_source[0], &edge_target[0], &edge_distances[0], &edge_num, distances);
 
     // Cast tip distances to PyObject
     return cast_tip_distances(distances, tip_num, elements);
@@ -49,16 +49,16 @@ PyObject *cast_tip_distances(double *distances, int tip_num, int elements) {
     PyObject *py_row = PyList_New(tip_num);
 
     size_t i = 0, j = 0;
-    for (size_t k = 0; k < (elements * elements); k++, i++) {
+    for (size_t k = 0; k < (size_t)(elements * elements); k++, i++) {
         // Add completed row to matrix
-        if (i == tip_num) {
+        if (i == (size_t)tip_num) {
             PyList_SetItem(py_matrix, j, py_row);
             j++; i = 0; k += elements - tip_num;
             py_row = PyList_New(tip_num);
         }
 
         // Break for loop once all tip data are consumed
-        if (j >= tip_num) { break; }
+        if (j >= (size_t)tip_num) { break; }
 
         // Malloc does not clear memory, we must set diagonals to zero
         double distance = distances[k];
