@@ -1,0 +1,1 @@
+gfortran -fPIC -c src/hclust.f -o src/hclustf.o; ./setup.py build_ext --inplace --force
