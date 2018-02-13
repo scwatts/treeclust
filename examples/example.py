@@ -7,7 +7,7 @@ import pathlib
 import Bio.Phylo.NewickIO
 
 
-import copheneticd
+import treeclust
 
 
 def get_arguments():
@@ -32,7 +32,7 @@ def main():
         tree = next(Bio.Phylo.NewickIO.parse(fh))
 
     # Run pair-wise-distance calculation
-    distances = copheneticd.distance(tree)
+    distances = treeclust.copheneticd(tree)
 
 
 if __name__ == '__main__':

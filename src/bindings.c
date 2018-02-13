@@ -6,27 +6,27 @@ static char copheneticd_docs[] = "Calculate pairwise distances from a phylogenet
 
 
 // Method definition
-static PyMethodDef CopheneticdMethods[] = {
-    {"run", run, METH_VARARGS, copheneticd_docs},
+static PyMethodDef TreeclustMethods[] = {
+    {"copheneticd", copheneticd, METH_VARARGS, copheneticd_docs},
     {NULL, NULL, 0, NULL}
 };
 
 
 // Module documentation
-static char copheneticd_module_docs[] = "Calculate pairwise distances from a phylogenetic tree";
+static char treeclust_module_docs[] = "Tree clustering utilities";
 
 
 // Module definition
-static struct PyModuleDef copheneticd_module = {
+static struct PyModuleDef treeclust_module = {
     PyModuleDef_HEAD_INIT,
-    "_copheneticd",
-    copheneticd_module_docs,
+    "_treeclust",
+    treeclust_module_docs,
     -1,
-    CopheneticdMethods
+    TreeclustMethods
 };
 
 
 // Module init
-PyMODINIT_FUNC PyInit__copheneticd(void) {
-	return PyModule_Create(&copheneticd_module);
+PyMODINIT_FUNC PyInit__treeclust(void) {
+	return PyModule_Create(&treeclust_module);
 }

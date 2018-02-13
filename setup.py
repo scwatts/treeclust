@@ -11,7 +11,7 @@ if sys.version_info < (3,5):
 
 
 # Set package details
-package_name = 'cophenetic'
+package_name = 'treeclust'
 package_description = 'Efficiently calculate cophenetic distance between phylogeny tips'
 package_version = '0.0.1'
 author = 'Stephen Watts'
@@ -19,7 +19,7 @@ licence = 'gpl'
 
 source_files = ['src/copheneticd.c', 'src/bindings.c', 'src/dist_nodes.c']
 extension = setuptools.extension.Extension(
-        '_copheneticd',
+        '_treeclust',
         source_files,
         extra_compile_args=['-Wno-maybe-uninitialized'])
 

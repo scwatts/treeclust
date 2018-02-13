@@ -3,7 +3,7 @@
 #include "macros.h"
 
 
-PyObject *run(PyObject *self, PyObject *args) {
+PyObject *copheneticd(PyObject *self, PyObject *args) {
     // Top-level arguments
     PyObject *py_edges_source, *py_edges_target, *py_distances;
     int tip_num = 0, node_num = 0, edge_num = 0;

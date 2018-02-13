@@ -5,7 +5,7 @@ import sys
 import Bio.Phylo
 
 
-import _copheneticd
+import _treeclust
 
 
 class Node():
@@ -16,7 +16,7 @@ class Node():
         self.branch_length = tree_node.branch_length
 
 
-def distance(tree):
+def copheneticd(tree):
     # Check that input tree is an instance of BioPython's BaseTree
     if not isinstance(tree, Bio.Phylo.BaseTree.Tree):
         print('error: recived non-tree object', file=sys.stderr)
@@ -32,7 +32,7 @@ def distance(tree):
     # TODO: must apply cladewise ordering prior to cophenetic distance calc
     # TODO: this may not be necessary for raw trees
     edges_source, edges_target = zip(*edges)
-    return _copheneticd.run(tips, nodes, edges_source, edges_target, distances, len(edges))
+    return _treeclust.copheneticd(tips, nodes, edges_source, edges_target, distances, len(edges))
 
 
 def edge_distances(tree, tip_number):
