@@ -79,3 +79,16 @@ def hclust(distances, elements, method):
     # TODO: add handler for options to take as string
     # TODO: check arguments have a valid configuration
     return _treeclust.hclust(distances, elements, method)
+
+
+def cuttree(tree, height_threshold):
+    # TODO: check arguments have a valid configuration
+    n = len(tree['order'])
+    for i, height in enumerate(tree['height'], 1):
+        if height > height_threshold:
+            k = n - i + 1
+            break
+    else:
+        k = n - i
+
+    return _treeclust.cuttree(tree['merge'], k, n)

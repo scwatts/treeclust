@@ -17,7 +17,8 @@ package_version = '0.0.1'
 author = 'Stephen Watts'
 licence = 'gpl'
 
-source_files = ['src/copheneticd.c', 'src/bindings.c', 'src/dist_nodes.c', 'src/hclust.c']
+source_files = ['src/copheneticd.c', 'src/bindings.c', 'src/dist_nodes.c', 'src/hclust.c',
+        'src/cuttree.c', 'src/hclust-utils.c']
 fortran_objects = ['src/hclustf.o', '/usr/lib64/libgfortran.so.4']
 extension = setuptools.Extension(
         '_treeclust',

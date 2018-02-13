@@ -1,1 +1,1 @@
-from .util import copheneticd, hclust
+from .util import copheneticd, hclust, cuttree

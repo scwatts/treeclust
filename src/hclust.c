@@ -13,6 +13,7 @@ PyObject *hclust(PyObject *self, PyObject *args) {
     }
 
     // Check that that python objects are iterables and of correct type
+    // TODO: move these checks to the python interface
     if (! is_pysimplenumeric_pysequence(py_distances)) {
       PyErr_SetString(PyExc_TypeError, "py_distances was not a integer or float sequence (e.g. list or tuple)");
       return NULL;

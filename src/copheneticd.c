@@ -14,6 +14,7 @@ PyObject *copheneticd(PyObject *self, PyObject *args) {
     }
 
     // Check that that python objects are iterables and of correct type
+    // TODO: move these checks to the python interface
     if (! is_pytype_pysequence(PyLong_Check, py_edges_source)) {
       PyErr_SetString(PyExc_TypeError, "edge_source was not an integer sequence (e.g. list or tuple)");
       return NULL;

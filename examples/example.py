@@ -37,6 +37,9 @@ def main():
     # Get clusters
     clustering = treeclust.hclust(distances, 5, 3)
 
+    # Cut the tree
+    membership = treeclust.cuttree(clustering, 1.5)
+
 
 if __name__ == '__main__':
     main()

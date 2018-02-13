@@ -1,6 +1,6 @@
 #include "copheneticd.h"
 #include "hclust.h"
-//#include "cuttree.h"
+#include "cuttree.h"
 
 
 // Method documentation
@@ -14,7 +14,7 @@ static char cuttree_docs[] = "Cut a hclust dendrogram at a specific threshold";
 static PyMethodDef TreeclustMethods[] = {
     {"copheneticd", copheneticd, METH_VARARGS, copheneticd_docs},
     {"hclust", hclust, METH_VARARGS, hclust_docs},
-    //{"cuttree", cuttree, METH_VARARGS, cuttree_docs},
+    {"cuttree", cuttree, METH_VARARGS, cuttree_docs},
     {NULL, NULL, 0, NULL}
 };
 
