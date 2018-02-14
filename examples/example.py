@@ -1,6 +1,5 @@
 #!/usr/bin/env python3
 import argparse
-import collections
 import pathlib
 
 
@@ -13,7 +12,7 @@ import treeclust
 def get_arguments():
     parser = argparse.ArgumentParser()
     parser.add_argument('--input_fp', required=True, type=pathlib.Path,
-            help='Inptu file path pls')
+            help='Input newick-format tree file path')
 
     # Ensure that input file exists
     args = parser.parse_args()
@@ -32,13 +31,13 @@ def main():
         tree = next(Bio.Phylo.NewickIO.parse(fh))
 
     # Run pair-wise-distance calculation
-    distances = treeclust.copheneticd(tree)
+    distances, tips = treeclust.copheneticd(tree)
 
     # Get clusters
     clustering = treeclust.hclust(distances, tree.count_terminals(), 3)
 
     # Cut the tree
-    membership = treeclust.cuttree(clustering, 0.05)
+    membership = treeclust.cuttree(clustering, 1.5)
 
 
 if __name__ == '__main__':
