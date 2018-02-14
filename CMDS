@@ -1,1 +1,0 @@
-gfortran -fPIC -c src/hclust.f -o src/hclustf.o; pip3 install --user --upgrade .
