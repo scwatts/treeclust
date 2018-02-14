@@ -67,7 +67,7 @@ void cutree(int merge[], int which[], int n, int ans[])
 	/* does this k-th merge belong to a desired group size which[j] ?
 	 * if yes, find j (maybe multiple ones): */
 	found_j = 0;
-	for(j = 0; j < n; j++) {
+	for(j = 0; j < 1; j++) {
 	    if(which[j] == n - k) {
 		if(!found_j) { /* first match (and usually only one) */
 		    found_j = 1;
@@ -94,7 +94,7 @@ void cutree(int merge[], int which[], int n, int ans[])
     } /* for(k ..) {merge} */
 
     /* Dealing with trivial case which[] = n : */
-    for(j = 0; j < n; j++)
+    for(j = 0; j < 1; j++)
 	if(which[j] == n)
 	    for(l = 1, m1 = j*n; l <= n; l++, m1++)
 		ans[m1] = l;
