@@ -27,18 +27,20 @@ def copheneticd(tree):
     nodes = len(tree.get_nonterminals())
 
     # Get edges and distances
-    distances, edges = edge_distances(tree, tips)
+    distances, edges, ordered_tips = edge_distances(tree, tips)
 
     # TODO: must apply cladewise ordering prior to cophenetic distance calc
     # TODO: this may not be necessary for raw trees
     edges_source, edges_target = zip(*edges)
-    return _treeclust.copheneticd(tips, nodes, edges_source, edges_target, distances, len(edges))
+    result = _treeclust.copheneticd(tips, nodes, edges_source, edges_target, distances, len(edges))
+    return result, ordered_tips
 
 
 def edge_distances(tree, tip_number):
     # Init ret vars
     distances = list()
     edges = list()
+    tip_order = list()
 
     # Add tree root to tree; dfs traversal
     # ape::cophenetic requires tip numbering to start from 0..(len(tips)-1) and internal nodes
@@ -56,6 +58,8 @@ def edge_distances(tree, tip_number):
         if node.tree_node.is_terminal():
             node_id = tip_i
             tip_i += 1
+            # Record tip and tip number so we can return ordered list
+            tip_order.append((node.tree_node.name, tip_i))
         else:
             node_id = node_i
             node_i += 1
@@ -68,11 +72,12 @@ def edge_distances(tree, tip_number):
         if node.branch_length is None:
             continue
 
-        # Record distances and edges
+        # Record data
         distances.append(node.branch_length)
         edges.append((node.parent_id, node_id))
 
-    return distances, edges
+    ordered_tips = [name for name, i in sorted(tip_order, key=lambda k: k[1])]
+    return distances, edges, ordered_tips
 
 
 def hclust(distances, elements, method):
