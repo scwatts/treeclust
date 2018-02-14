@@ -41,7 +41,9 @@ PyObject *copheneticd(PyObject *self, PyObject *args) {
     dist_nodes(&tip_num, &node_num, &edge_source[0], &edge_target[0], &edge_distances[0], &edge_num, distances);
 
     // Cast tip distances to PyObject
-    return cast_tip_distances(distances, tip_num, elements);
+    PyObject *py_upper_distances = cast_tip_distances(distances, tip_num, elements);
+    free(distances);
+    return py_upper_distances;
 }
 
 

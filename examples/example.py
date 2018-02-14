@@ -35,10 +35,10 @@ def main():
     distances = treeclust.copheneticd(tree)
 
     # Get clusters
-    clustering = treeclust.hclust(distances, 5, 3)
+    clustering = treeclust.hclust(distances, tree.count_terminals(), 3)
 
     # Cut the tree
-    membership = treeclust.cuttree(clustering, 1.5)
+    membership = treeclust.cuttree(clustering, 0.05)
 
 
 if __name__ == '__main__':

@@ -14,7 +14,7 @@ PyObject *cuttree(PyObject *self, PyObject *args) {
     }
 
     // Cast python types to c types
-    int merge[(n-1) * 2];
+    int *merge = (int *)malloc((n-1) * 2 * sizeof(int));
     for (size_t i = 0;  i < (size_t)(n - 1); i++) {
         PyObject *py_merge_pair = PySequence_GetItem(py_merge, i);
         merge[i] = PyLong_AsLong(PySequence_GetItem(py_merge_pair, 0));
@@ -22,11 +22,14 @@ PyObject *cuttree(PyObject *self, PyObject *args) {
     }
 
     // Call cutree
-    int membership[n];
+    int *membership = (int *)malloc(n * sizeof(int));
     int karr[1] = { k };
     cutree(merge, karr, n, membership);
 
-    return cast_membership(membership, n);
+    PyObject *py_membership = cast_membership(membership, n);
+    free(merge);
+    free(membership);
+    return py_membership;
 }
 
 

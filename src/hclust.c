@@ -20,7 +20,11 @@ PyObject *hclust(PyObject *self, PyObject *args) {
     }
 
     // Cast python types to c types
-    cast_pysequence_to_array(py_distances, distances, PySequence_Size(py_distances), PyFloat_AsDouble, double);
+    size_t distance_num = (size_t)PySequence_Size(py_distances);
+    double *distances = (double *)malloc(distance_num * sizeof(double));
+    for (size_t i = 0; i < distance_num; ++i){
+        distances[i] = PyFloat_AsDouble(PySequence_GetItem(py_distances, i));
+    }
 
     // Set up variables
     int length = (n*(n-1)/2);
@@ -38,6 +42,7 @@ PyObject *hclust(PyObject *self, PyObject *args) {
     hclust_(&n, &length, &iopt, ia, ib, crit, membr, nn, disnn, flag, distances);
     hcass2_(&n, ia, ib, order, iia, iib);
 
+    free(distances);
     return cast_result_to_pytype(iia, iib, crit, order, n);
 }
 
