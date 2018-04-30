@@ -38,7 +38,7 @@ extension = setuptools.Extension(
         '_treeclust',
         source_files,
         extra_objects=fortran_objects,
-        extra_compile_args=['-Wno-maybe-uninitialized'])
+        extra_compile_args=['-std=c99', '-Wno-maybe-uninitialized'])
 
 # Call setup
 setuptools.setup(
