@@ -1,0 +1,19 @@
+language: python
+python: 3.6
+dist: trusty
+
+addons:
+  apt:
+    sources:
+      - ubuntu-toolchain-r-test
+    packages:
+      - gfortran
+
+branches:
+  only:
+    master
+
+install: pip3 install .
+before_script: pip3 install codecov biopython
+script: coverage run -m unittest
+after_success: codecov
