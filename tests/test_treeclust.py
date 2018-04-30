@@ -13,7 +13,7 @@ class TestTreeclust(unittest.TestCase):
 
     def setUp(self):
         self.tree = self.load_tree()
-        self.distances = treeclust.copheneticd(self.tree)
+        self.distances, self.tips = treeclust.copheneticd(self.tree)
         # TODO: update parameters once we have some more logic for element determination
         self.clustering = treeclust.hclust(self.distances, 5, 3)
         self.membership = treeclust.cuttree(self.clustering, 1.5)
